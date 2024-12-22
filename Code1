@@ -1,0 +1,38 @@
+# Prevalence_Fig2A
+
+CairoPDF(file="Figure2A.pdf", width = 4.96, height = 4.20, family="Arial")
+mydata <- data.frame(group = c("AD continuum","AD continuum","AD continuum", "AD continuum", "NAP", "NAP", "NAP", "Normal"),
+  subgroup = c("A+T+N+","A+T-N-","A+T+N-","A+T-N+", "A-T+N+", "A-T-N+", "A-T+N-", "A-T-N-"),
+  value = round(c(158,142, 32, 99, 31, 23,16,132) / 633 * 100, 1)
+)
+gap_size <- 0.2
+mydata <- mydata %>%
+  arrange(group, subgroup) %>%
+  mutate(total = sum(value),
+         end = cumsum(value) / total * 2 * pi,
+         start = lag(end, default = 0),
+         gap = gap_size / total * 2 * pi,
+         start = start + gap/2,
+         end = end - gap/2,
+         end = ifelse(row_number() == n(), 2 * pi - gap/2, end),
+         mid = 0.5 * (start + end),
+         label_position = 1.6)
+inner_data <- mydata %>%
+  group_by(group) %>%
+  summarise(start = first(start),
+            end = last(end),
+            mid = mean(c(first(start), last(end))),
+            value = sum(value),
+            label_position = 0.9)  
+gg <- ggplot() +
+  geom_arc_bar(data = inner_data, aes(x0 = 0, y0 = 0, r0 = 0.5, r = 1.3, start = start, end = end, fill = group), color = "white", size = 0.25) +
+  geom_arc_bar(data = mydata, aes(x0 = 0, y0 = 0, r0 =1.4, r = 1.8, start = start, end = end, fill = subgroup), color = "white", size = 0.25) +
+  geom_text(data = mydata, aes(x = label_position * sin(mid), y = label_position * cos(mid), label = paste(round(value, 1), "%", sep="")), size = 1.8,color = "black") +
+  geom_text(data = inner_data,aes(x = label_position * sin(mid), y = label_position * cos(mid), label = paste(group, "\n", round(value, 1), "%", sep="")), size = 2.6, color = "black") +
+  coord_fixed() +
+  theme_void() +
+  scale_fill_manual(values = c("AD continuum" = "#EB7C2F", "NAP" = "#4170C2", "Normal" = "#787380",
+                               "A+T+N+" = "#EF9659", "A+T-N-" = "#FBE5D5", "A+T+N-" = "#F3B082", "A+T-N+" = "#F7CBAC",
+                               "A-T+N+" = "#678DCE", "A-T-N+" = "#8DA9DA", "A-T+N-" = "#B3C6E7", "A-T-N-" = "#A5ABBD")) +
+  theme(legend.position = "none")
+print(gg)
