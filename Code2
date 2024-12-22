@@ -1,0 +1,112 @@
+####Sankey plot_Fig3A
+
+data <- read_excel("Sankey_Total.xlsx")
+data$Predisease <- factor(data$Predisease,levels = c("AD","key1", "DLB","key2", "FTD", "key3","VCI", "key4","CJD", "key5","OND", "key6","NND", "key7","UND"))
+data$Postdisease1 <- str_sub(data$Postdisease,end = -2)
+#data$Postdisease1 <- factor(data$Postdisease1,levels = c("AD", "DLB", "FTD", "VCI", "CJD", "OND", "NND", "UND"))
+# col<- c("#D1392B","#4F9B8E","#F9F3A5", "#A9C4E6", "#d79eb0", "#BBD6B1", "#F5D47D", "#385989",# "#D1392B", "#4F9B8E", "#F9F3A5", "#A9C4E6", "#d79eb0","#BBD6B1", "#F5D47D", "#385989")
+col<- c("#385989","#ffffff","#F5D47D","#ffffff","#BBD6B1","#ffffff","#d79eb0", "#ffffff","#A9C4E6", "#ffffff","#F9F3A5", "#ffffff", "#4F9B8E", "#ffffff","#D1392B",
+                 "#385989","#ffffff","#F5D47D","#ffffff","#BBD6B1","#ffffff","#d79eb0", "#ffffff","#A9C4E6", "#ffffff","#F9F3A5", "#ffffff", "#4F9B8E", "#ffffff","#D1392B")
+                 data %>%
+                   ggplot(aes(y = value, axis1 = Predisease, axis2 = Postdisease1)) +
+                   geom_alluvium(aes(fill= Predisease, color = Predisease), 
+                                 size = 0.01, knot.pos = 0,alpha = 0.7,
+                                 curve_type = "quintic", width = 0.01, 
+                                 show.legend = FALSE) +
+                   geom_stratum(color = col, fill = col,position = "identity",size = 0.01,
+                                alpha = 1, width = 0.015, show.legend = FALSE) +
+                   scale_fill_manual(breaks = c("AD","key1", "DLB","key2", "FTD", "key3","VCI", "key4","CJD", "key5","OND", "key6","NND", "key7","UND"),
+                                     values = c("#D1392B","#ffffff","#4F9B8E","#ffffff","#F9F3A5", "#ffffff","#A9C4E6", "#ffffff","#d79eb0", "#ffffff","#BBD6B1", "#ffffff","#F5D47D", "#ffffff","#385989"),
+                                     labels = c("AD","key1", "DLB","key2", "FTD", "key3","VCI", "key4","CJD", "key5","OND", "key6","NND", "key7","UND")) +
+                   scale_color_manual(breaks = c("AD","key1", "DLB","key2", "FTD", "key3","VCI", "key4","CJD", "key5","OND", "key6","NND", "key7","UND"),
+                                      values = c("#D1392B","#ffffff","#4F9B8E","#ffffff","#F9F3A5", "#ffffff","#A9C4E6", "#ffffff","#d79eb0", "#ffffff","#BBD6B1", "#ffffff","#F5D47D", "#ffffff","#385989"),
+                                      labels = c("AD","key1", "DLB","key2", "FTD", "key3","VCI", "key4","CJD", "key5","OND", "key6","NND", "key7","UND")) +
+                   theme_classic() +
+                   scale_y_continuous(breaks = NULL)+
+                   scale_x_continuous(breaks = NULL)+
+                   theme(panel.grid = element_blank(),
+                         axis.title = element_blank(),
+                         axis.text = element_text (size = 10, 
+                                                   family = "sans"),
+                         plot.margin = unit(c(0,1.5,0,0),'cm'))+
+                   #coord_cartesian(clip="off")+
+                   annotate(geom="text",
+                            x=1,y=140,
+                            label=TeX("AD"),
+                            hjust=0,
+                            color="#000000")+
+                   annotate(geom="text",
+                            x=1,y=117,
+                            label=TeX("DLB"),
+                            hjust=0,
+                            color= "#000000")+
+                   annotate(geom="text",
+                            x=1,y=113,
+                            label=TeX("FTD"),
+                            hjust=0,
+                            color="#000000")+
+                   annotate(geom="text",
+                            x=1,y=100,
+                            label="VCI",
+                            hjust=0,
+                            color="#000000")+
+                   annotate(geom="text",
+                            x=1,y=85,
+                            label="CJD",
+                            hjust=0,
+                            color="#000000")+
+                   annotate(geom="text",
+                            x=1,y=60,
+                            label="OND",
+                            hjust=0,
+                            color="#000000")+
+                   annotate(geom="text",
+                            x=1,y=25,
+                            label="NND",
+                            hjust=0,
+                            color="#000000")+
+                   annotate(geom="text",
+                            x=1,y=5,
+                            label="UND",
+                            hjust=0,
+                            color="#000000")+  
+                   annotate(geom="text",
+                            x=2.01,y=140,
+                            label=TeX("AD"),
+                            hjust=0,
+                            color="#000000")+
+                   annotate(geom="text",
+                            x=2.01,y=118,
+                            label=TeX("DLB"),
+                            hjust=0,
+                            color= "#000000")+
+                   annotate(geom="text",
+                            x=2.01,y=113,
+                            label=TeX("FTD"),
+                            hjust=0,
+                            color="#000000")+
+                   annotate(geom="text",
+                            x=2.01,y=103,
+                            label="VCI",
+                            hjust=0,
+                            color="#000000")+
+                   annotate(geom="text",
+                            x=2.01,y=90,
+                            label="CJD",
+                            hjust=0,
+                            color="#000000")+
+                   annotate(geom="text",
+                            x=2.01,y=68,
+                            label="OND",
+                            hjust=0,
+                            color="#000000")+
+                   annotate(geom="text",
+                            x=2.01,y=35,
+                            label="NND",
+                            hjust=0,
+                            color="#000000")+
+                   annotate(geom="text",
+                            x=2.01,y=9,
+                            label="UND",
+                            hjust=0,
+                            color="#000000")
