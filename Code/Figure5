@@ -1,1 +1,46 @@
+# Proportional bar_Fig5B
 
+f5f <-data.frame(Category = c('Whole', 'Whole', 'AD-Continuum','AD-Continuum', NAP', 'NAP','Normal','Normal'),
+                 Status = c('Pre-CSF', 'Post-CSF', 'Pre-CSF', 
+                            'Post-CSF', 'Pre-CSF', 'Post-CSF', 
+                            'Pre-CSF','Post-CSF'),
+                 Number = c(15/103*100, 20/103*100,6/23*100,9/23*100,
+                            5/40*100, 4/40*100, 4/40*100,7/40*100), 
+                 resub = c('A','A','B',"B","c","c","D","D"),
+                 num = c(103, 103, 23,23,40,40, 40,40))
+f5f$sd <- sqrt(((f5f$Number)/100*(1-(f5f$Number)/100))/f5f$num)
+f5f$sd <- f5f$sd*100
+sub <- factor(f5f$Status,levels = c('Pre-CSF','Post-CSF'))
+cat <- factor(f5f$Category,levels = c('Whole','AD-Continuum','NAP',"Normal"))
+library(ggplot2)
+p5 <- ggplot(f5f,aes(x=cat, y=Number, fill=sub)) +
+  
+  geom_bar(position=position_dodge(0.6),
+           stat="identity", width = 0.5,color="black",size=.1) +
+  scale_y_continuous(limits = c(0,100),breaks=seq(0,100,20),
+                     expand = expand_scale(add = 0)) +
+  scale_fill_manual(values=c("#637B83","#94BDCB"),
+                    labels = c('Pre-CSF', 'Post-CSF')) +
+  scale_x_discrete(labels = c('Whole','AD Continuum','NAP', 'Normal'), drop = TRUE) +
+  
+  labs(y = "Non-cognition specific medication, %",size=3, x = '') +
+  
+  theme(axis.line = element_line(linetype = "solid", size = 0.2),  
+        axis.ticks = element_line(colour = NA, linetype = "blank"),
+        panel.grid.major = element_line(colour = "black",linetype = "solid"), 
+        panel.grid.minor = element_line(colour = NA,linetype = "solid"), 
+        axis.text.y = element_text(colour = "black",size=10), 
+        axis.text.x = element_text(angle = 45,hjust=1,colour = "black",size=10), 
+        panel.background = element_rect(fill = "white"),
+        panel.grid.major.x = element_blank(),
+        plot.background = element_rect(colour = NA))+
+  labs(x = NULL, fill = NULL) +
+  theme( panel.grid.major.y=element_line(size=0.2, color="#e5e5e5"), 
+        panel.grid.minor = element_line(linetype = "blank"),
+        legend.position = "none",
+        text = element_text(family = "Arial"))
+p4
+p <- p4+geom_errorbar(aes(ymin=Number-sd,ymax=Number+sd, width = 0.2),position=position_dodge(width = 0.6), size = 0.2)
+p
+print(p)
+dev.off()
