@@ -1,4 +1,4 @@
-####Sankey plot_Fig3A
+####Sankey plot_Fig3
 
 data <- read_excel("Sankey_Total.xlsx")
 data$Predisease <- factor(data$Predisease,levels = c("AD","key1", "DLB","key2", "FTD", "key3","VCI", "key4","CJD", "key5","OND", "key6","NND", "key7","UND"))
