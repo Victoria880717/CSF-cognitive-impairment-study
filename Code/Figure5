@@ -1,4 +1,4 @@
-# Proportional bar_Fig5B
+# Proportional bar_Fig5
 
 f5f <-data.frame(Category = c('Whole', 'Whole', 'AD-Continuum','AD-Continuum', NAP', 'NAP','Normal','Normal'),
                  Status = c('Pre-CSF', 'Post-CSF', 'Pre-CSF', 
