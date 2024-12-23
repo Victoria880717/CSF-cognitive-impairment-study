@@ -1,1 +1,101 @@
+#ROC_Figure1A
+cutoffs <- read_excel("ROC-Figure1A.xlsx")
+cutoffs<-dplyr::filter(cutoffs, !is.na(PTAU181))
+cutoffs$group <- as.factor(cutoffs$group)
+CairoPDF(file="ROC.pdf", width = 5.98, height = 5.28)
+par(mar = c(4, 4, 3, 2), mgp = c(2, 0.7, 0)) 
+fit1<- glm(group~RATIO181,family = binomial(),data = cutoffs)
+summary(fit1)
+cutoffs$predvalue_1<- predict(fit1,type = "response")
+pred1<- prediction(cutoffs$predvalue_1,cutoffs$group)
+perf1 <- performance(pred1,"tpr","fpr")
+auc1<- performance(pred1,"auc")
+auc1
+plot(perf1,col = "#BF5B30",main = "AD vs.CU",lwd = 1.2)
+title(cex.main = 1.5,  cex.lab = 1.2)  
+cutoffs<-dplyr::filter(cutoffs2, !is.na(PTAU181))
+fit3<- glm(group~PTAU181,family = binomial(),data = cutoffs)
+summary(fit3)
+cutoffs$predvalue_3<- predict(fit3,type = "response")
+pred3 <- prediction(cutoffs$predvalue_3,cutoffs$group)
+perf3 <- performance(pred3,"tpr","fpr")
+auc3 <- performance(pred3,"auc")
+auc3
+plot(perf3,col = "#00B64F",lwd = 1.2,add = TRUE)
+cutoffs<-dplyr::filter(cutoffs2, !is.na(RATIOTTAU))
+fit2<- glm(group~RATIOTTAU,family = binomial(),data = cutoffs)
+summary(fit2)
+cutoffs$predvalue_2<- predict(fit2,type = "response")
+pred2 <- prediction(cutoffs$predvalue_2,cutoffs$group)
+perf2 <- performance(pred2,"tpr","fpr")
+auc2 <- performance(pred2,"auc")
+auc2
+plot(perf2,col = "#FFC673",lwd = 1.2,add = TRUE)
+cutoffs<-dplyr::filter(cutoffs2, !is.na(RATIO40))
+fit3<- glm(group~RATIO40,family = binomial(),data =cutoffs)
+summary(fit3)
+cutoffs$predvalue_3<- predict(fit3,type = "response")
+pred3 <- prediction(cutoffs$predvalue_3,cutoffs$group)
+perf3 <- performance(pred3,"tpr","fpr")
+auc3 <- performance(pred3,"auc")
+auc3
+plot(perf3,col ="#435AC5",auc.polygon=F,lwd = 1.2,add = TRUE)
+fit3<- glm(group~ABETA42,family = binomial(),data = cutoffs)
+summary(fit3)
+cutoffs$predvalue_3<- predict(fit3,type = "response")
+pred3 <- prediction(cutoffs$predvalue_3,cutoffs$group)
+perf3 <- performance(pred3,"tpr","fpr")
+auc3 <- performance(pred3,"auc")
+auc3
+plot(perf3,col = "#F09DD8",lwd = 1.2,add = TRUE)
+fit3<- glm(group~TTAU,family = binomial(),data = cutoffs)
+summary(fit3)
+cutoffs$predvalue_3<- predict(fit3,type = "response")
+pred3 <- prediction(cutoffs$predvalue_3,cutoffs$group)
+perf3 <- performance(pred3,"tpr","fpr")
+auc3 <- performance(pred3,"auc")
+auc3
+plot(perf3,col = "#9BBDC9",lwd = 1.2,add = TRUE)
+fit3<- glm(group~ABETA40,family = binomial(),data = cutoffs)
+summary(fit3)
+cutoffs$predvalue_3<- predict(fit3,type = "response")
+pred3 <- prediction(cutoffs$predvalue_3,cutoffs$group)
+perf3 <- performance(pred3,"tpr","fpr")
+auc3 <- performance(pred3,"auc")
+auc3
+plot(perf3,col = "#E4EA7F",lwd = 1.2,add = TRUE)
+abline(a=0,b=1,col = "gray")
+legend("bottomright",bty = "n",legend = c("pTau/Aβ42 (AUC: 0.994)",
+                                          "pTau (AUC: 0.948)",
+                                          "tTau/Aβ42 (AUC: 0.878)",
+                                          "Aβ42/Aβ40 (AUC: 0.856)",
+                                          "Aβ42 (AUC: 0.799)",
+                                          "tTau (AUC: 0.762)",
+                                          "Aβ40 (AUC: 0.557)"),
+       lty = 1,lwd = 1,col = c("#BF5B30","#00B64F","#FFC673","#435AC5","#F09DD8","#9BBDC9","#E4EA7F"),cex=0.8)
 
+
+#Scatterplot_Figure 1B
+p <- ggplot(df, aes(x = Aβ40, y =Aβ42, fill = group)) +
+  geom_point(data = subset(df, group == 'AD'), aes(color = group), shape = 21, size = 3.5,stroke = 0.1, color = "black",alpha = 0.9) +
+  geom_point(data = subset(df, group == 'NC'), aes(color = group), shape = 21, size = 3.5,stroke = 0.1, color = "black",alpha = 0.9) +
+  scale_fill_manual(values = c('AD' = '#F09739', 'NC' = '#55B7E6')) + 
+  geom_abline(intercept = 758.62, slope = 0, linetype = "dashed",linewidth=0.3) + 
+  geom_abline(intercept = 0, slope = 0.145, linetype = "dashed",linewidth=0.3) +  
+  geom_vline(xintercept = 3811.605, linetype = "dashed",linewidth=0.3) + 
+  theme_minimal() +
+  labs(x = "Aβ40 (pg/ml)", y = "Aβ42 (pg/ml)", color = "Group") +
+  annotate("text", x =16500, y = 1800, label = "Aβ42/Aβ40 = 0.145\nPPA=100%, NPA=58%, OPA=79%", size=2.3,parse =FALSE) +
+  annotate("text", x =16000,y = 600, label = "Aβ42 =  759pg/ml\nPPA=81%, NPA=64%, OPA=73%",size=2.3, parse = FALSE)+
+  annotate("text", x =4800,y = 1900, label = "Aβ40 = 3812pg/ml\nPPA=28%, NPA=91%, OPA=60%",size=2.3, parse = FALSE, angle = 90)
+p <- p + coord_cartesian(xlim = c(1500, 20000), ylim = c(0, 2500))+
+  theme(panel.border = element_rect(colour = "black", fill=NA, linewidth=0.4),legend.position = "bottom",
+        axis.title.x = element_text(size = 10),  
+        axis.title.y = element_text(size = 10),  
+        axis.ticks.x = element_blank(),    
+        axis.ticks.y = element_blank(),   
+        panel.grid.major = element_line(size = 0.1, color = "#e5e5e5"),  
+        panel.grid.minor = element_line(size = 0.1, color = "#e5e5e5"),  
+        axis.text.x = element_text(size = 10),   
+        axis.text.y = element_text(size = 10)))
+print（p)
