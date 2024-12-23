@@ -1,4 +1,4 @@
-# Prevalence_Fig2A
+# Prevalence_Fig2
 
 CairoPDF(file="Figure2A.pdf", width = 4.96, height = 4.20, family="Arial")
 mydata <- data.frame(group = c("AD continuum","AD continuum","AD continuum", "AD continuum", "NAP", "NAP", "NAP", "Normal"),
