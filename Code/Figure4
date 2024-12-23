@@ -1,4 +1,4 @@
-# Paired line_Fig4A
+# Paired line_Fig4
 
 df <- read_excel("Paired line_AD_AD.xlsx") %>% 
   pivot_longer(-Res) %>% 
